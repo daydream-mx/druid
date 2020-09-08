@@ -147,6 +147,15 @@ impl<T: Data> Label<T> {
         self
     }
 
+    /// Builder-style method to set the wrap width.
+    ///
+    /// You may pass `f64::INFINITY` to disable word wrapping
+    /// (the default behaviour).
+    pub fn with_wrap_width(mut self, width: f64) -> Self {
+        self.set_wrap_width(width);
+        self
+    }
+
     /// Set the label's text.
     pub fn set_text(&mut self, text: impl Into<LabelText<T>>) {
         self.text = text.into();
@@ -186,6 +195,14 @@ impl<T: Data> Label<T> {
     /// [`Key<FontDescriptor>`]: ../struct.Key.html
     pub fn set_font(&mut self, font: impl Into<KeyOrValue<FontDescriptor>>) {
         self.layout.set_font(font);
+    }
+
+    /// Set the width at which to wrap words.
+    ///
+    /// You may pass `f64::INFINITY` to disable word wrapping
+    /// (the default behaviour).
+    pub fn set_wrap_width(&mut self, width: f64) {
+        self.layout.set_wrap_width(width);
     }
 
     fn update_text_if_needed(&mut self, factory: &mut PietText, data: &T, env: &Env) {
