@@ -244,7 +244,7 @@ impl<T: Data> Widget<T> for Label<T> {
 
     fn lifecycle(&mut self, ctx: &mut LifeCycleCtx, event: &LifeCycle, data: &T, env: &Env) {
         if let LifeCycle::WidgetAdded = event {
-            self.update_text_if_needed(&mut ctx.text(), data, env);
+            self.update_text_if_needed(ctx.text(), data, env);
         }
     }
 
@@ -254,7 +254,7 @@ impl<T: Data> Widget<T> for Label<T> {
             ctx.request_layout();
         }
         //FIXME: this should only happen if the env has changed.
-        self.layout.rebuild_if_needed(&mut ctx.text(), env);
+        self.layout.rebuild_if_needed(ctx.text(), env);
     }
 
     fn layout(&mut self, _ctx: &mut LayoutCtx, bc: &BoxConstraints, _data: &T, _env: &Env) -> Size {
