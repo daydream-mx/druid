@@ -56,6 +56,16 @@ pub struct TextLayout {
     layout: Option<PietTextLayout>,
 }
 
+/// Metrics describing the layout text.
+pub struct LayoutMetrics {
+/// The nominal size of the layout.
+pub size: Size,
+/// The distance from the nominal top of the layout to the first baseline.
+pub baseline: f64,
+//inking_rect: Insets,
+}
+
+
 impl TextLayout {
     /// Create a new `TextLayout` object.
     ///
@@ -234,6 +244,19 @@ impl TextLayout {
             )
         }
     }
+
+pub fn layout(&mut self, factory: &mut PietText, env: &Env) -> LayoutMetrics {
+self.rebuild_layout_if_needed(factory, env);
+let size = self.layout.as_ref().unwrap().size();
+let baseline = self
+.layout
+.as_ref()
+.and_then(|l| l.line_metric(0))
+.unwrap_or_default()
+.baseline;
+LayoutMetrics { size, baseline }
+}
+
 
     ///  Draw the layout at the provided `Point`.
     ///

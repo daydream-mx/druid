@@ -260,10 +260,11 @@ impl<T: Data> Widget<T> for Label<T> {
     fn layout(&mut self, _ctx: &mut LayoutCtx, bc: &BoxConstraints, _data: &T, _env: &Env) -> Size {
         bc.debug_check("Label");
 
-        let text_size = self.layout.size();
+        let text_metrics = self.layout.layout(&mut ctx.text(), env);
+        ctx.set_baseline_position(text_metrics.size.height - text_metrics.baseline);
         bc.constrain(Size::new(
-            text_size.width + 2. * LABEL_X_PADDING,
-            text_size.height,
+            text_metrics.size.width + 2. * LABEL_X_PADDING,
+            text_metrics.size.height,
         ))
     }
 

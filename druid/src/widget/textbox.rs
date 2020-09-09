@@ -414,12 +414,16 @@ impl Widget<String> for TextBox {
         let width = env.get(theme::WIDE_WIDGET_WIDTH);
         let min_height = env.get(theme::BORDERED_WIDGET_HEIGHT);
 
-        let text_metrics = self.text.size();
-        let text_height = text_metrics.height + TEXT_INSETS.y_value();
+        let text_metrics = self.text.layout(&mut ctx.text(), env);
+        let text_height = text_metrics.size.height + TEXT_INSETS.y_value();
         let height = text_height.max(min_height);
 
         let size = bc.constrain((width, height));
+        let bottom_padding = (size.height - text_metrics.size.height) / 2.0;
+        let baseline_off = bottom_padding + (text_metrics.size.height - text_metrics.baseline);
         self.width = size.width;
+        ctx.set_baseline_position(baseline_off);
+
         size
     }
 

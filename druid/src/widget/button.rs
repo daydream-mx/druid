@@ -116,7 +116,7 @@ impl<T: Data> Widget<T> for Button<T> {
 
     fn layout(
         &mut self,
-        layout_ctx: &mut LayoutCtx,
+        ctx: &mut LayoutCtx,
         bc: &BoxConstraints,
         data: &T,
         env: &Env,
@@ -124,10 +124,12 @@ impl<T: Data> Widget<T> for Button<T> {
         bc.debug_check("Button");
         let padding = Size::new(LABEL_INSETS.x_value(), LABEL_INSETS.y_value());
         let label_bc = bc.shrink(padding).loosen();
-        self.label_size = self.label.layout(layout_ctx, &label_bc, data, env);
+        self.label_size = self.label.layout(ctx, &label_bc, data, env);
         // HACK: to make sure we look okay at default sizes when beside a textbox,
         // we make sure we will have at least the same height as the default textbox.
         let min_height = env.get(theme::BORDERED_WIDGET_HEIGHT);
+        let baseline = ctx.widget_state.baseline_offset;
+        ctx.set_baseline_position(baseline + LABEL_INSETS.y1);
 
         bc.constrain(Size::new(
             self.label_size.width + padding.width,
